@@ -1,0 +1,11 @@
+include ':navigation'
+include ':details'
+include ':testing:app'
+include ':appcomponent'
+include ':appdeps'
+include ':di'
+include ':home'
+include ':repository'
+include ':githubapi'
+include ':app'
+rootProject.name = "DaggerCourseCIO"

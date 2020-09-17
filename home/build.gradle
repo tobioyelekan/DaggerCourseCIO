@@ -1,0 +1,69 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+
+android {
+    compileSdkVersion 29
+    buildToolsVersion "29.0.3"
+
+    defaultConfig {
+        minSdkVersion 21
+        targetSdkVersion 29
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "com.example.daggercourse.testing.app.githubapi.GitHubBrowserTestRunner"
+        consumerProguardFiles "consumer-rules.pro"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    buildFeatures {
+        viewBinding true
+    }
+
+    compileOptions {
+        sourceCompatibility = 1.8
+        targetCompatibility = 1.8
+    }
+
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8.toString()
+    }
+}
+
+dependencies {
+    implementation project(":appdeps")
+    implementation project(":di")
+    implementation project(":repository")
+
+    implementation deps.androidx.constraintlayout
+    implementation deps.androidx.fragment
+    implementation deps.androidx.livedata
+    implementation deps.androidx.recyclerview
+    implementation deps.androidx.viewmodel
+
+    implementation deps.dagger.core
+    implementation deps.coroutines.android
+    kapt deps.dagger.compiler
+
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation 'androidx.core:core-ktx:1.2.0'
+
+    testImplementation 'junit:junit:4.12'
+    testImplementation deps.androidx.archtesting
+    testImplementation deps.truth
+    testImplementation project(":testing:app")
+    testImplementation deps.coroutines.testing
+
+    androidTestImplementation deps.androidx.fragmenttesting
+    androidTestImplementation project(":testing:app")
+    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+}
