@@ -6,9 +6,11 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.daggercourse.di.scope.ScreenScope
+import com.example.daggercourse.home.list.NumberItem
 import com.example.daggercourse.home.list.RepoItem
 import com.example.daggercourse.navigation.DetailsScreen
 import com.example.daggercourse.navigation.ScreenNavigator
+import com.example.daggercourse.poweradapter.RecyclerItem
 import com.example.daggercourse.repository.AppRepository
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -24,17 +26,20 @@ class HomeViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             val topRepos = repository.getTopRepos()
-            _viewState.value = HomeViewStateLoaded(
-                repos = topRepos.map {
+            val listItems = mutableListOf<RecyclerItem>()
+            topRepos.forEachIndexed { index, repoApiModel ->
+                listItems.add(NumberItem(number = index + 1))
+                listItems.add(
                     RepoItem(
-                        ownerName = it.owner.login,
-                        name = it.name,
-                        description = it.description ?: "",
-                        starsCount = it.stargazersCount,
-                        forkCount = it.forksCount
+                        ownerName = repoApiModel.owner.login,
+                        name = repoApiModel.name,
+                        description = repoApiModel.description ?: "",
+                        starsCount = repoApiModel.stargazersCount,
+                        forkCount = repoApiModel.forksCount
                     )
-                }
-            )
+                )
+            }
+            _viewState.value = HomeViewStateLoaded(listItems)
         }
     }
 

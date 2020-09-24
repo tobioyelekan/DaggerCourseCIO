@@ -43,6 +43,7 @@ dependencies {
     implementation project(":di")
     implementation project(":repository")
     implementation project(":navigation")
+    implementation project(":poweradapter")
     implementation deps.androidx.constraintlayout
     implementation deps.androidx.fragment
     implementation deps.androidx.livedata
