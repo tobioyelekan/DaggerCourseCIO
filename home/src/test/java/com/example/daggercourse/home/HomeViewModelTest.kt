@@ -4,8 +4,10 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.example.daggercourse.githubapi.model.RepoApiModel
 import com.example.daggercourse.githubapi.model.UserApiModel
 import com.example.daggercourse.home.list.RepoItem
+import com.example.daggercourse.navigation.DetailsScreen
 import com.example.daggercourse.repository.AppRepository
 import com.example.daggercourse.testing.app.githubapi.FakeGithubApi
+import com.example.daggercourse.testing.app.navigation.FakeScreenNavigator
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.test.setMain
 import org.junit.Before
@@ -33,6 +35,7 @@ class HomeViewModelTest {
 
     private lateinit var viewModel: HomeViewModel
     private lateinit var viewStateValues: MutableList<HomeViewState>
+    private lateinit var screenNavigator: FakeScreenNavigator
 
     @Before
     fun setUp() {
@@ -41,7 +44,7 @@ class HomeViewModelTest {
             AppRepository(FakeGithubApi().apply { topRepos = listOf(fakeRepoApiModel) })
         viewStateValues = mutableListOf()
 
-        viewModel = HomeViewModel(appRepository)
+        viewModel = HomeViewModel(appRepository, screenNavigator)
         viewModel.viewStateUpdates.observeForever {
             viewStateValues.add(it)
         }
@@ -53,6 +56,7 @@ class HomeViewModelTest {
         val expectedState = HomeViewStateLoaded(
             repos = listOf(
                 RepoItem(
+                    ownerName = fakeRepoApiModel.owner.login,
                     name = fakeRepoApiModel.name,
                     description = fakeRepoApiModel.description ?: "",
                     starsCount = fakeRepoApiModel.stargazersCount,
@@ -62,5 +66,15 @@ class HomeViewModelTest {
         )
 
         assertEquals(viewStateValues[0], expectedState)
+    }
+
+    @Test
+    fun `repoSelected calls gotoScreen`() {
+        viewModel.onRepoSelected(fakeRepoApiModel.owner.login, fakeRepoApiModel.name)
+        val expectedScreen = DetailsScreen(fakeRepoApiModel.owner.login, fakeRepoApiModel.name)
+
+        assertEquals(screenNavigator.openedScreens.size, 1)
+        assertEquals(screenNavigator.openedScreens[0], expectedScreen)
+
     }
 }

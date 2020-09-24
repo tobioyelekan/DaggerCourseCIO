@@ -8,7 +8,7 @@ class ActivityDrivenScreenNavigator @Inject constructor() : ScreenNavigator {
 
     var handleGoToScreen: ((Screen) -> Unit)? = null
 
-    override fun gotoScreen(screen: Screen) {
+    override fun goToScreen(screen: Screen) {
         handleGoToScreen?.invoke(screen)
     }
 

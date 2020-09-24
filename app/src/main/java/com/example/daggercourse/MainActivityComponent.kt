@@ -9,18 +9,21 @@ import dagger.Component
 import dagger.Module
 
 @ActivityScope
-@Component(modules = [MainActivityComponent::class])
+@Component(modules = [MainActivityModule::class])
 interface MainActivityComponent : NavigationDeps {
-    @Component.Factory
-    interface Factory {
-        fun create(): MainActivityComponent
-    }
 
     fun inject(mainActivity: MainActivity)
+
+    @Component.Factory
+    interface Factory {
+
+        fun create(): MainActivityComponent
+    }
 }
 
 @Module
 interface MainActivityModule {
+
     @Binds
     fun bindScreenNavigator(activityDrivenScreenNavigator: ActivityDrivenScreenNavigator): ScreenNavigator
 }

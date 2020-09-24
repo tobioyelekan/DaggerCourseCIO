@@ -24,7 +24,6 @@ class HomeFragment : Fragment() {
 
     override fun onAttach(context: Context) {
         inject()
-        this.resources.displayMetrics
         super.onAttach(context)
     }
 
@@ -35,7 +34,7 @@ class HomeFragment : Fragment() {
     ): View? {
         val binding = ScreenHomeBinding.inflate(inflater, container, false)
         binding.repoList.apply {
-            adapter = HomeRepoAdapter()
+            adapter = HomeRepoAdapter(homeViewModel::onRepoSelected)
             layoutManager = LinearLayoutManager(context)
             addItemDecoration(
                 DividerItemDecoration(

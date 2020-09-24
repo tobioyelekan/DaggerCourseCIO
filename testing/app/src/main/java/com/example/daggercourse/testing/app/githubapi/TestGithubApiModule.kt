@@ -8,6 +8,6 @@ import dagger.Module
 interface TestGithubApiModule {
 
     @Binds
-    fun bindsGithubApi(fakeGithubApi: FakeGithubApi): GitHubApi
+    fun bindGithubApi(fakeGithubApi: FakeGithubApi): GitHubApi
 
 }
